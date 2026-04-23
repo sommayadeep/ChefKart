@@ -10,9 +10,19 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174', process.env.FRONTEND_URL].filter(Boolean),
-    credentials: true
+    origin: function (origin, callback) {
+        const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://chefs-kart.vercel.app', 'https://chef-kart-6jd6-plum.vercel.app'];
+        if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
+app.options('*', cors()); // Enable preflight for all routes
 app.use(express.json());
 app.use(cookieParser());
 
@@ -44,7 +54,14 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 // Socket.io Setup
 const io = require('socket.io')(server, {
     cors: {
-        origin: ['http://localhost:5173', 'http://localhost:5174', process.env.FRONTEND_URL].filter(Boolean),
+        origin: (origin, callback) => {
+            const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://chefs-kart.vercel.app', 'https://chef-kart-6jd6-plum.vercel.app'];
+            if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: ['GET', 'POST'],
         credentials: true
     }
