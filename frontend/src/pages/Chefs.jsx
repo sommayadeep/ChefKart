@@ -75,19 +75,14 @@ const Chefs = () => {
                 transition={{ delay: i * 0.1 }}
                 className="glass rounded-[32px] overflow-hidden hover:shadow-xl transition-all group"
               >
-                <div className="relative h-64">
-                  <img 
-                    src={chef.userId?.profileImage || `https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=600`} 
-                    alt={chef.userId?.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1 font-bold">
-                    <Star size={16} className="text-yellow-500 fill-current" />
-                    {chef.rating?.toFixed(1) || '0.0'}
-                  </div>
-                </div>
                 <div className="p-8">
-                  <h3 className="text-2xl mb-2">{chef.userId?.name || 'Unknown Chef'}</h3>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-2xl">{chef.userId?.name || 'Unknown Chef'}</h3>
+                    <div className="bg-primary/10 text-primary px-3 py-1 rounded-full flex items-center gap-1 font-bold text-sm">
+                      <Star size={14} className="fill-current" />
+                      {chef.rating?.toFixed(1) || '0.0'}
+                    </div>
+                  </div>
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center gap-2 text-text-light">
                       <MapPin size={16} />

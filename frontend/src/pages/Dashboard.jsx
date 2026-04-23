@@ -46,7 +46,7 @@ const Dashboard = () => {
 
   if (loading) return <div className="text-center py-20">Loading dashboard...</div>;
 
-  const incompleteProfile = user.role === 'chef' && (!user.profileImage || !user.bio);
+  const incompleteProfile = user.role === 'chef' && !user.bio;
 
   return (
     <div className="section bg-surface min-h-screen">
@@ -59,7 +59,7 @@ const Dashboard = () => {
           >
             <div>
               <h3 className="text-xl font-bold text-primary mb-1">Complete Your Profile!</h3>
-              <p className="text-text-light">Adding a photo and bio helps you get 3x more bookings.</p>
+              <p className="text-text-light">Completing your bio helps you get 3x more bookings.</p>
             </div>
             <Link to="/settings" className="btn btn-primary">
               Go to Settings

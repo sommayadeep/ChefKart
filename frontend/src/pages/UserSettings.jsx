@@ -58,17 +58,7 @@ const UserSettings = () => {
           </div>
 
           <form onSubmit={handleUpdate} className="space-y-8">
-            <div className="flex flex-col items-center gap-6 mb-12">
-              <div className="relative">
-                <div className="w-40 h-40 rounded-[40px] overflow-hidden border-4 border-white shadow-xl">
-                  <img 
-                    src={formData.profileImage || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=400'} 
-                    alt="Profile" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
+
 
             <div className="space-y-4">
               <div>

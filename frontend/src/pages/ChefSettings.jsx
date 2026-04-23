@@ -102,17 +102,7 @@ const ChefSettings = () => {
           <form onSubmit={handleUpdate} className="space-y-12">
             {/* Top Middle Profile Photo Display Only */}
             <div className="flex flex-col items-center gap-4">
-              <div className="relative">
-                <div className="w-56 h-56 rounded-[56px] overflow-hidden border-4 border-white shadow-2xl ring-8 ring-primary/5">
-                  <img 
-                    src={profile.userId?.profileImage || 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=600'} 
-                    alt="Profile" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-              
-              <div className="w-full max-w-md mt-12">
+              <div className="w-full max-w-md">
                 <label className="block text-center text-sm font-black uppercase tracking-widest text-text-light mb-4">Chef Display Name</label>
                 <div className="relative">
                   <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />

@@ -74,20 +74,14 @@ const ChefProfile = () => {
               animate={{ opacity: 1, x: 0 }}
               className="glass p-10 rounded-[40px] mb-8"
             >
-              <div className="flex gap-8 items-start mb-10">
-                <img 
-                  src={chef.userId?.profileImage || `https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=600`} 
-                  alt={chef.userId?.name} 
-                  className="w-40 h-40 rounded-[32px] object-cover"
-                />
-                <div className="flex-1">
-                  <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-4xl">{chef.userId?.name || 'Chef'}</h1>
-                    <div className="bg-primary/10 text-primary px-4 py-2 rounded-2xl flex items-center gap-2 font-bold">
-                      <Star size={20} className="fill-current" />
-                      {chef.rating?.toFixed(1) || '0.0'} ({chef.numReviews || 0} Reviews)
-                    </div>
+              <div className="flex flex-col mb-10">
+                <div className="flex justify-between items-center mb-4">
+                  <h1 className="text-4xl">{chef.userId?.name || 'Chef'}</h1>
+                  <div className="bg-primary/10 text-primary px-4 py-2 rounded-2xl flex items-center gap-2 font-bold">
+                    <Star size={20} className="fill-current" />
+                    {chef.rating?.toFixed(1) || '0.0'} ({chef.numReviews || 0} Reviews)
                   </div>
+                </div>
                   <div className="flex items-center gap-6 text-text-light mb-6">
                     <div className="flex items-center gap-2">
                       <MapPin size={18} />
@@ -105,7 +99,6 @@ const ChefProfile = () => {
                       </span>
                     ))}
                   </div>
-                </div>
               </div>
 
               <div className="border-t border-glass-border pt-10">
