@@ -15,10 +15,11 @@ const Dashboard = () => {
 
   const fetchBookings = async () => {
     try {
-      const res = await api.get('/bookings');
+      const endpoint = user.role === 'chef' ? '/bookings/chef' : '/bookings/user';
+      const res = await api.get(endpoint);
       setBookings(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to fetch bookings:", err);
     }
   };
 
@@ -72,7 +73,7 @@ const Dashboard = () => {
             <motion.div whileHover={{ translateY: -5 }} className="precious-card p-10 group">
               <Users size={36} className="text-primary mb-6 group-hover:scale-110 transition-transform" />
               <h3 className="text-lg font-bold text-text-light uppercase tracking-widest mb-2">Active Clientele</h3>
-              <p className="text-4xl font-bold text-text">12</p>
+              <p className="text-4xl font-bold text-text">{new Set(bookings.map(b => b.userId?._id || b.userId)).size}</p>
             </motion.div>
             <motion.div whileHover={{ translateY: -5 }} className="precious-card p-10 group">
               <CheckCircle2 size={36} className="text-accent mb-6 group-hover:scale-110 transition-transform" />
@@ -82,7 +83,7 @@ const Dashboard = () => {
             <motion.div whileHover={{ translateY: -5 }} className="precious-card p-10 group">
               <Wallet size={36} className="text-primary mb-6 group-hover:scale-110 transition-transform" />
               <h3 className="text-lg font-bold text-text-light uppercase tracking-widest mb-2">Accrued Revenue</h3>
-              <p className="text-4xl font-bold text-text">₹45,200</p>
+              <p className="text-4xl font-bold text-text">₹{bookings.filter(b => b.status === 'accepted').reduce((sum, b) => sum + (Number(b.totalAmount) || 0), 0).toLocaleString()}</p>
             </motion.div>
           </div>
         )}
