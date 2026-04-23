@@ -25,10 +25,10 @@ const Dashboard = () => {
 
   const updateStatus = async (id, status) => {
     try {
-      await api.put(`/bookings/${id}/status`, { status });
+      await api.patch(`/bookings/${id}`, { status });
       fetchBookings();
     } catch (err) {
-      console.error(err);
+      console.error("Failed to update status:", err);
     }
   };
 
