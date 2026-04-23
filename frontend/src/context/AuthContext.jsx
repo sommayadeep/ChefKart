@@ -3,7 +3,7 @@ import api from '../services/api';
 import { io } from 'socket.io-client';
 
 const AuthContext = createContext();
-const socket = io({ withCredentials: true, autoConnect: false });
+const socket = io(import.meta.env.VITE_BACKEND_URL || '/', { withCredentials: true, autoConnect: false });
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
