@@ -34,6 +34,9 @@ router.get('/', async (req, res) => {
                 const chefIds = userLocation.map(u => u._id);
                 if (chefIds.length > 0) {
                     query.userId = { $in: chefIds };
+                } else {
+                    console.log("No chefs found within 20km. Returning all chefs as fallback.");
+                    // Do not set query.userId, allowing it to return all chefs
                 }
             } catch (geoErr) {
                 console.warn("Geolocation query failed, returning all chefs:", geoErr.message);
