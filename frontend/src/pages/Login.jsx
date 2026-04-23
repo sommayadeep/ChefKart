@@ -75,9 +75,15 @@ const Login = () => {
               onSuccess={credentialResponse => {
                 googleLogin(credentialResponse.credential)
                   .then(() => navigate('/dashboard'))
-                  .catch(() => setError('Google Login Failed'));
+                  .catch((err) => {
+                    console.error("Backend Google Login Error:", err.response?.data || err.message);
+                    setError(err.response?.data?.error || 'Backend verification failed');
+                  });
               }}
-              onError={() => setError('Google Login Failed')}
+              onError={() => {
+                console.error("Google OAuth Popup/Init Error");
+                setError('Google Popup Blocked or Client ID Mismatch');
+              }}
             />
           </div>
         </form>

@@ -87,6 +87,7 @@ router.post('/google', async (req, res) => {
         res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
         res.json({ user: { id: user._id, name: user.name, email, role: user.role } });
     } catch (err) {
+        console.error("GOOGLE LOGIN BACKEND ERROR:", err.message);
         res.status(500).json({ error: err.message });
     }
 });
