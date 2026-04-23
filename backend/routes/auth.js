@@ -88,7 +88,7 @@ router.post('/google', async (req, res) => {
         res.json({ user: { id: user._id, name: user.name, email, role: user.role } });
     } catch (err) {
         console.error("GOOGLE LOGIN BACKEND ERROR:", err.message);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Backend verification failed: " + err.message });
     }
 });
 router.post('/login', async (req, res) => {
