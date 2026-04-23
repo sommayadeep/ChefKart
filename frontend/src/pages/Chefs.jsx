@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { Star, MapPin, Search, Filter } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Star, MapPin, Search, Filter, ChefHat, ArrowRight, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Chefs = () => {
   const [chefs, setChefs] = useState([]);
@@ -38,91 +38,114 @@ const Chefs = () => {
   };
 
   return (
-    <div className="section bg-surface min-h-screen">
-      <div className="container">
-        <div className="flex justify-between items-center mb-12">
-          <div>
-            <h1 className="text-4xl mb-2">Discover Home Chefs</h1>
-            <p className="text-text-light">Browse top-rated chefs in your area</p>
-          </div>
+    <div className="section min-h-screen bg-background relative py-24">
+      <div className="container relative z-10">
+        <div className="flex justify-between items-end mb-24 border-b border-glass-border pb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="flex items-center gap-2 text-primary font-bold tracking-[0.4em] text-[10px] uppercase mb-6">
+              <ChefHat size={16} />
+              The Collection
+            </div>
+            <h1 className="text-7xl tracking-tighter mb-4 text-text">Master <span className="text-primary italic">Home Chefs</span></h1>
+            <p className="text-text-light text-xl max-w-lg font-medium opacity-80">Discover exceptional culinary talent curated for your private residence.</p>
+          </motion.div>
+          
           <div className="flex gap-4">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light" size={18} />
+            <div className="relative group">
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-text-light opacity-50 group-focus-within:text-primary transition-colors" size={18} />
               <input 
                 type="text" 
                 placeholder="Search cuisines..." 
-                className="pl-12 pr-4 py-3 rounded-xl bg-white shadow-sm border-none outline-none w-64"
+                className="pl-14 pr-6 py-4 rounded-2xl bg-white border border-glass-border focus:border-primary outline-none w-72 shadow-sm transition-all"
                 value={cuisine}
                 onChange={(e) => setCuisine(e.target.value)}
               />
             </div>
-            <button className="btn glass flex items-center gap-2">
+            <button className="btn btn-outline h-[58px] px-8 rounded-2xl border-glass-border font-bold text-[11px] uppercase tracking-widest">
               <Filter size={18} />
-              Filters
+              Refine
             </button>
           </div>
         </div>
 
         {loading ? (
-          <div className="text-center py-20">Loading chefs...</div>
+          <div className="flex flex-col items-center justify-center py-40 gap-6">
+            <Loader2 className="animate-spin text-primary" size={48} strokeWidth={1.5} />
+            <p className="text-text-light font-bold uppercase tracking-[0.4em] text-[10px]">Scanning the Registry...</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-3 gap-8">
-            {chefs.map((chef, i) => (
-              <motion.div 
-                key={chef._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className="glass rounded-[32px] overflow-hidden hover:shadow-xl transition-all group"
-              >
-                <div className="p-8">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-2xl">{chef.userId?.name || 'Unknown Chef'}</h3>
-                    <div className="bg-primary/10 text-primary px-3 py-1 rounded-full flex items-center gap-1 font-bold text-sm">
-                      <Star size={14} className="fill-current" />
-                      {chef.rating?.toFixed(1) || '0.0'}
+          <div className="grid grid-cols-3 gap-10">
+            <AnimatePresence mode="popLayout">
+              {chefs.map((chef, i) => (
+                <motion.div 
+                  key={chef._id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="precious-card flex flex-col h-full bg-white group"
+                >
+                  <div className="p-10 flex-1 relative">
+                    <div className="flex justify-between items-start mb-8">
+                      <div className="flex items-center gap-1.5 text-primary">
+                        <Star size={14} className="fill-current" />
+                        <span className="text-xs font-black uppercase tracking-widest">{chef.rating?.toFixed(1) || '5.0'}</span>
+                      </div>
+                      {location.lat && chef.userId?.location?.coordinates && (
+                        <span className="text-[10px] font-black text-text-light uppercase tracking-widest px-3 py-1 bg-background rounded-full border border-glass-border">
+                          {(Math.sqrt(
+                            Math.pow(chef.userId.location.coordinates[1] - location.lat, 2) + 
+                            Math.pow(chef.userId.location.coordinates[0] - location.lng, 2)
+                          ) * 111).toFixed(1)} km away
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="text-4xl mb-3 tracking-tighter group-hover:text-primary transition-colors">
+                      {chef.userId?.name || 'Chef Gastronomy'}
+                    </h3>
+                    
+                    <div className="flex items-center gap-2 text-text-light text-xs mb-8 font-bold uppercase tracking-widest opacity-70">
+                      <MapPin size={14} className="text-primary/60" />
+                      {chef.userId?.city || 'Elite Circle'}
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-10">
+                      {(chef.cuisines || ['Continental', 'Italian']).map((c, idx) => (
+                        <span key={idx} className="bg-background border border-glass-border text-text-light px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="pt-10 border-t border-glass-border flex justify-between items-center">
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-text-light mb-1.5">Honorarium</p>
+                        <p className="text-3xl font-bold text-text">₹{chef.pricing}<span className="text-xs font-medium text-text-light"> /session</span></p>
+                      </div>
+                      <Link to={`/chefs/${chef.userId?._id || chef._id}`} className="btn btn-primary p-4 rounded-2xl shadow-none group-hover:bg-primary transition-all">
+                        <ArrowRight size={20} className="text-white" />
+                      </Link>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-2 text-text-light">
-                      <MapPin size={16} />
-                      {chef.userId?.address || 'Nearby'}
-                    </div>
-                    {location.lat && chef.userId?.location?.coordinates && Array.isArray(chef.userId.location.coordinates) && (
-                      <span className="text-xs bg-primary/5 text-primary px-3 py-1 rounded-full font-bold">
-                        {(Math.sqrt(
-                          Math.pow(chef.userId.location.coordinates[1] - location.lat, 2) + 
-                          Math.pow(chef.userId.location.coordinates[0] - location.lng, 2)
-                        ) * 111).toFixed(1)} km
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {(chef.cuisines || []).map((c, i) => (
-                      <span key={i} className="bg-primary/5 text-primary px-3 py-1 rounded-lg text-sm font-medium">
-                        {c}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex justify-between items-center pt-6 border-t border-glass-border">
-                    <div>
-                      <p className="text-sm text-text-light">Starting from</p>
-                      <p className="text-xl font-bold text-primary">₹{chef.pricing}<span className="text-sm text-text-light">/meal</span></p>
-                    </div>
-                    <Link to={`/chefs/${chef.userId?._id || chef._id}`} className="btn btn-primary">
-                      View Profile
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
 
         {!loading && chefs.length === 0 && (
-          <div className="text-center py-20 bg-white rounded-[32px] shadow-sm">
-            <h3 className="text-2xl mb-2">No chefs found</h3>
-            <p className="text-text-light">Try searching for a different cuisine</p>
+          <div className="text-center py-40 precious-card border-dashed bg-transparent border-2">
+            <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center mx-auto mb-8 border border-glass-border">
+              <Search size={32} className="text-text-light opacity-30" />
+            </div>
+            <h3 className="text-4xl mb-4 tracking-tighter">No chefs found</h3>
+            <p className="text-text-light text-lg mb-12 opacity-80 max-w-sm mx-auto">Our current selection does not match your specific search criteria.</p>
+            <button onClick={() => setCuisine('')} className="btn btn-outline px-10">Expand Selection</button>
           </div>
         )}
       </div>

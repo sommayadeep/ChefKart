@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, LogIn } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { GoogleLogin } from '@react-oauth/google';
 
@@ -18,55 +18,77 @@ const Login = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid credentials');
+      setError('Credentials not recognized');
     }
   };
 
   return (
-    <div className="section min-h-[80vh] flex items-center justify-center">
+    <div className="section min-h-screen flex items-center justify-center bg-background relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass p-12 rounded-[32px] w-full max-w-md"
+        transition={{ duration: 0.6 }}
+        className="precious-card p-16 w-full max-w-xl bg-white relative z-10"
       >
-        <div className="text-center mb-10">
-          <h2 className="text-4xl mb-2">Welcome Back</h2>
-          <p className="text-text-light">Login to manage your bookings</p>
+        <div className="text-center mb-16">
+          <div className="w-20 h-20 bg-primary/10 rounded-[28px] flex items-center justify-center mx-auto mb-8 border border-primary/20">
+            <ShieldCheck size={36} className="text-primary" />
+          </div>
+          <h2 className="text-5xl mb-4 tracking-tighter text-text">Authorized Entry</h2>
+          <p className="text-text-light font-bold tracking-[0.3em] uppercase text-[10px]">Private Reserve Security</p>
         </div>
 
-        {error && <div className="bg-primary/10 text-primary p-4 rounded-xl mb-6 text-center">{error}</div>}
+        {error && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-rose-50 text-rose-500 border border-rose-100 p-5 rounded-2xl mb-10 text-center text-sm font-bold uppercase tracking-widest"
+          >
+            {error}
+          </motion.div>
+        )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <div className="relative">
-            <Mail className="absolute left-4 top-4 text-text-light" size={20} />
-            <input 
-              type="email" 
-              placeholder="Email Address" 
-              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-surface border border-transparent focus:border-primary outline-none"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+          <div className="space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.2em] text-text-light ml-2">Email Address</label>
+            <div className="relative">
+              <Mail className="absolute left-6 top-5 text-text-light opacity-40" size={20} />
+              <input 
+                type="email" 
+                placeholder="name@example.com" 
+                className="pl-16 w-full"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
           </div>
-          <div className="relative">
-            <Lock className="absolute left-4 top-4 text-text-light" size={20} />
-            <input 
-              type="password" 
-              placeholder="Password" 
-              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-surface border border-transparent focus:border-primary outline-none"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+          
+          <div className="space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.2em] text-text-light ml-2">Secure Phrase</label>
+            <div className="relative">
+              <Lock className="absolute left-6 top-5 text-text-light opacity-40" size={20} />
+              <input 
+                type="password" 
+                placeholder="••••••••••••" 
+                className="pl-16 w-full"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
           </div>
-          <button type="submit" className="btn btn-primary py-4 w-full justify-center text-lg">
-            <LogIn size={20} />
-            Login
+
+          <button type="submit" className="btn btn-primary py-5 w-full justify-center text-lg mt-4 group">
+            Sign In
+            <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />
           </button>
 
-          <div className="flex items-center gap-4 my-4">
+          <div className="flex items-center gap-6 my-4">
             <div className="flex-1 h-[1px] bg-glass-border"></div>
-            <span className="text-text-light text-sm">OR</span>
+            <span className="text-text-light text-[10px] font-bold uppercase tracking-widest">Or Sync With</span>
             <div className="flex-1 h-[1px] bg-glass-border"></div>
           </div>
 
@@ -75,21 +97,15 @@ const Login = () => {
               onSuccess={credentialResponse => {
                 googleLogin(credentialResponse.credential)
                   .then(() => navigate('/dashboard'))
-                  .catch((err) => {
-                    console.error("Backend Google Login Error:", err.response?.data || err.message);
-                    setError(err.response?.data?.error || 'Backend verification failed');
-                  });
+                  .catch((err) => setError('Verification failed'));
               }}
-              onError={() => {
-                console.error("Google OAuth Popup/Init Error");
-                setError('Google Popup Blocked or Client ID Mismatch');
-              }}
+              shape="pill"
             />
           </div>
         </form>
 
-        <p className="text-center mt-8 text-text-light">
-          Don't have an account? <Link to="/register" className="text-primary font-bold">Register</Link>
+        <p className="text-center mt-12 text-text-light font-medium text-sm">
+          Awaiting an invitation? <Link to="/register" className="text-primary font-bold hover:underline ml-1">Request Membership</Link>
         </p>
       </motion.div>
     </div>

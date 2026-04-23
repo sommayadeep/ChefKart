@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-import { Camera, Save, Clock, CheckCircle, Navigation, Loader2, User as UserIcon } from 'lucide-react';
+import { Save, Clock, Navigation, User as UserIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ChefSettings = () => {
@@ -16,7 +16,6 @@ const ChefSettings = () => {
     timeSlots: []
   });
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -45,23 +44,18 @@ const ChefSettings = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!user?.id) {
-      alert("ERROR: User ID is missing! Profile: " + JSON.stringify(user));
-      setMessage('Update failed: User ID is missing. Please re-login.');
-      return;
-    }
-    
-    const url = `/chefs/${user.id}`;
-    console.log("Saving to URL:", url);
     try {
-      await api.patch(`/chefs/${user.id}`, {
+      await api.patch('/auth/update', {
+        name: profile.userId.name
+      });
+
+      await api.put('/chefs/profile', {
         pricing: profile.pricing,
         experience: profile.experience,
         bio: profile.bio,
         specialties: profile.specialties,
         availability: profile.availability,
-        timeSlots: profile.timeSlots,
-        name: profile?.userId?.name || user?.name
+        timeSlots: profile.timeSlots
       });
       setMessage('Profile updated successfully!');
       setTimeout(() => setMessage(''), 3000);
@@ -71,44 +65,43 @@ const ChefSettings = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-20">Loading settings...</div>;
+  if (loading) return <div className="text-center py-20 text-text-light">Loading settings...</div>;
 
   return (
-    <div className="section bg-surface min-h-screen">
-      <div className="container max-w-4xl">
+    <div className="section bg-background min-h-screen py-24">
+      <div className="container max-w-3xl">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass p-12 rounded-[40px] shadow-2xl relative overflow-hidden"
+          className="precious-card p-16 shadow-xl relative bg-white"
         >
           {/* Success Message Float */}
           {message && (
             <motion.div 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`absolute top-8 left-1/2 -translate-x-1/2 z-10 px-8 py-3 rounded-2xl font-bold shadow-lg ${
-                message.includes('failed') ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+              className={`absolute top-6 left-1/2 -translate-x-1/2 z-10 px-6 py-2 rounded-xl font-bold shadow-md text-sm ${
+                message.includes('failed') ? 'bg-rose-500 text-white' : 'bg-primary text-white'
               }`}
             >
               {message}
             </motion.div>
           )}
 
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-black mb-4">Chef Profile Settings</h1>
-            <p className="text-text-light">Customize your culinary brand and availability</p>
+          <div className="text-center mb-12 border-b border-glass-border pb-8">
+            <h1 className="text-4xl font-bold mb-3 text-text">Chef Registry</h1>
+            <p className="text-text-light font-medium">Manage your professional profile and availability</p>
           </div>
 
-          <form onSubmit={handleUpdate} className="space-y-12">
-            {/* Top Middle Profile Photo Display Only */}
+          <form onSubmit={handleUpdate} className="space-y-10">
             <div className="flex flex-col items-center gap-4">
               <div className="w-full max-w-md">
-                <label className="block text-center text-sm font-black uppercase tracking-widest text-text-light mb-4">Chef Display Name</label>
+                <label className="block text-center text-[11px] font-bold uppercase tracking-widest text-text-light mb-2">Display Name</label>
                 <div className="relative">
-                  <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />
+                  <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-text-light opacity-50" size={20} />
                   <input 
                     type="text" 
-                    className="w-full pl-12 pr-4 py-5 rounded-[24px] bg-white shadow-inner border-none outline-none focus:ring-2 ring-primary text-center text-xl font-bold"
+                    className="w-full pl-14 pr-5 py-4 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors text-center text-lg font-bold text-text"
                     placeholder="Enter your professional name"
                     value={profile.userId?.name || ''}
                     onChange={(e) => setProfile({ ...profile, userId: { ...profile.userId, name: e.target.value } })}
@@ -120,10 +113,10 @@ const ChefSettings = () => {
 
             <div className="grid grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="block text-sm font-black uppercase tracking-widest text-text-light ml-2">Specialties</label>
+                <label className="block text-[11px] font-bold uppercase tracking-widest text-text-light mb-2 ml-2">Specialties</label>
                 <input 
                   type="text" 
-                  className="w-full p-5 rounded-[24px] bg-white shadow-inner border-none outline-none focus:ring-2 ring-primary"
+                  className="w-full px-5 py-4 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors font-medium text-text"
                   placeholder="Italian, Keto, Indian..."
                   value={profile.specialties?.join(', ') || ''}
                   onChange={(e) => setProfile({ ...profile, specialties: e.target.value.split(',').map(s => s.trim()) })}
@@ -131,19 +124,19 @@ const ChefSettings = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="block text-sm font-black uppercase tracking-widest text-text-light ml-2">Price (₹)</label>
+                  <label className="block text-[11px] font-bold uppercase tracking-widest text-text-light mb-2 ml-2">Honorarium (₹)</label>
                   <input 
                     type="number" 
-                    className="w-full p-5 rounded-[24px] bg-white shadow-inner border-none outline-none focus:ring-2 ring-primary"
+                    className="w-full px-5 py-4 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors font-medium text-text"
                     value={profile.pricing || ''}
                     onChange={(e) => setProfile({ ...profile, pricing: parseInt(e.target.value) || 0 })}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-black uppercase tracking-widest text-text-light ml-2">Exp (Yrs)</label>
+                  <label className="block text-[11px] font-bold uppercase tracking-widest text-text-light mb-2 ml-2">Exp (Yrs)</label>
                   <input 
                     type="number" 
-                    className="w-full p-5 rounded-[24px] bg-white shadow-inner border-none outline-none focus:ring-2 ring-primary"
+                    className="w-full px-5 py-4 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors font-medium text-text"
                     value={profile.experience || ''}
                     onChange={(e) => setProfile({ ...profile, experience: parseInt(e.target.value) || 0 })}
                   />
@@ -152,19 +145,19 @@ const ChefSettings = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-black uppercase tracking-widest text-text-light ml-2">Bio / Culinary Story</label>
+              <label className="block text-[11px] font-bold uppercase tracking-widest text-text-light mb-2 ml-2">Culinary Story</label>
               <textarea 
-                className="w-full p-6 rounded-[32px] bg-white shadow-inner border-none outline-none focus:ring-2 ring-primary min-h-[160px] resize-none"
-                placeholder="Tell your customers about your journey and passion..."
+                className="w-full p-5 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors font-medium min-h-[140px] resize-none text-text"
+                placeholder="Tell your clients about your journey and passion..."
                 value={profile.bio || ''}
                 onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
               ></textarea>
             </div>
 
             <div className="grid grid-cols-2 gap-8">
-              <div className="bg-white/50 p-8 rounded-[32px] border border-glass-border">
-                <h3 className="text-lg font-black mb-6 flex items-center gap-2">
-                  <Navigation className="text-primary" size={20} />
+              <div className="bg-background p-6 rounded-2xl border border-glass-border">
+                <h3 className="text-sm font-bold mb-4 flex items-center gap-2 text-text">
+                  <Navigation className="text-primary" size={18} />
                   Service Days
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -178,8 +171,8 @@ const ChefSettings = () => {
                           : [...(profile.availability || []), day];
                         setProfile({ ...profile, availability: newAvail });
                       }}
-                      className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
-                        profile.availability?.includes(day) ? 'bg-primary text-white shadow-lg' : 'bg-surface text-text-light'
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        profile.availability?.includes(day) ? 'bg-primary text-white shadow-sm' : 'bg-white border border-glass-border text-text-light hover:border-primary'
                       }`}
                     >
                       {day}
@@ -188,9 +181,9 @@ const ChefSettings = () => {
                 </div>
               </div>
 
-              <div className="bg-white/50 p-8 rounded-[32px] border border-glass-border">
-                <h3 className="text-lg font-black mb-6 flex items-center gap-2">
-                  <Clock className="text-primary" size={20} />
+              <div className="bg-background p-6 rounded-2xl border border-glass-border">
+                <h3 className="text-sm font-bold mb-4 flex items-center gap-2 text-text">
+                  <Clock className="text-primary" size={18} />
                   Time Slots
                 </h3>
                 <div className="flex flex-col gap-2">
@@ -204,8 +197,8 @@ const ChefSettings = () => {
                           : [...(profile.timeSlots || []), slot];
                         setProfile({ ...profile, timeSlots: newSlots });
                       }}
-                      className={`p-3 rounded-xl text-left text-xs font-bold transition-all border ${
-                        profile.timeSlots?.includes(slot) ? 'bg-primary/10 text-primary border-primary shadow-inner' : 'bg-surface text-text-light border-transparent'
+                      className={`px-4 py-2.5 rounded-lg text-left text-xs font-bold transition-all border ${
+                        profile.timeSlots?.includes(slot) ? 'bg-primary/10 text-primary border-primary' : 'bg-white border-glass-border text-text-light hover:border-primary'
                       }`}
                     >
                       {slot}
@@ -215,9 +208,9 @@ const ChefSettings = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary py-5 w-full justify-center text-xl font-black rounded-[32px] shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all">
-              <Save size={24} />
-              Save All Profile Changes
+            <button type="submit" className="btn btn-primary py-5 w-full justify-center text-sm tracking-widest mt-4">
+              <Save size={20} className="mr-2" />
+              Save Registry
             </button>
           </form>
         </motion.div>
