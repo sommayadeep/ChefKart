@@ -45,11 +45,8 @@ const ChefSettings = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await api.patch('/auth/update', {
-        name: profile.userId.name
-      });
-
-      await api.put('/chefs/profile', {
+      await api.patch(`/chefs/${user.id}`, {
+        name: profile.userId.name,
         pricing: profile.pricing,
         experience: profile.experience,
         bio: profile.bio,
