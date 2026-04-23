@@ -41,7 +41,12 @@ router.post('/register', async (req, res) => {
         }
 
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '1d' });
-        res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('token', token, { 
+            httpOnly: true, 
+            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: 'none',
+            secure: true
+        });
         res.status(201).json({ user: { id: user._id, name, email, role } });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -84,7 +89,12 @@ router.post('/google', async (req, res) => {
         }
 
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '1d' });
-        res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('token', token, { 
+            httpOnly: true, 
+            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: 'none',
+            secure: true
+        });
         res.json({ user: { id: user._id, name: user.name, email, role: user.role } });
     } catch (err) {
         console.error("GOOGLE LOGIN BACKEND ERROR:", err.message);
@@ -100,7 +110,12 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '1d' });
-        res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('token', token, { 
+            httpOnly: true, 
+            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: 'none',
+            secure: true
+        });
         res.json({ user: { id: user._id, name: user.name, email, role: user.role } });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -109,7 +124,11 @@ router.post('/login', async (req, res) => {
 
 // Logout
 router.post('/logout', (req, res) => {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true
+    });
     res.json({ message: 'Logged out successfully' });
 });
 
