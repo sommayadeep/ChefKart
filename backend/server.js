@@ -22,7 +22,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
-app.options('*', cors()); // Enable preflight for all routes
+app.options('(.*)', cors()); // Enable preflight for all routes
 app.use(express.json());
 app.use(cookieParser());
 
