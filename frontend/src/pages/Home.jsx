@@ -8,6 +8,9 @@ const Home = () => {
     <div className="home bg-background">
       {/* Hero Section */}
       <section className="section hero relative flex items-center pt-32 pb-20 overflow-hidden">
+        {/* Decorative Blurs */}
+        <div className="hero-blur-primary"></div>
+        <div className="hero-blur-accent"></div>
         <div className="container">
           <div className="grid grid-cols-2 gap-16 items-center">
             <motion.div 
