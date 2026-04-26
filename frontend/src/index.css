@@ -37,11 +37,25 @@
 }
 
 @layer base {
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Fix for input icon and placeholder overlap */
+  .input-with-icon {
+    padding-left: 2.8rem !important;
+  }
+  .input-icon {
+    left: 1.1rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    position: absolute !important;
+    pointer-events: none;
+    z-index: 2;
   }
 
   body {

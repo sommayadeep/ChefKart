@@ -147,11 +147,11 @@ const Register = () => {
             <div className="space-y-2.5">
               <label className="text-[11px] font-black uppercase tracking-[0.2em] text-text-light ml-2">Digital Address</label>
               <div className="relative">
-                <Mail className="absolute left-6 top-5 text-text-light opacity-40" size={20} />
+                <Mail className="input-icon text-text-light opacity-40" size={20} />
                 <input 
                   type="email" 
                   placeholder="name@example.com" 
-                  className="pl-16 w-full"
+                  className="input-with-icon w-full"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   required
@@ -164,11 +164,11 @@ const Register = () => {
             <div className="space-y-2.5">
               <label className="text-[11px] font-black uppercase tracking-[0.2em] text-text-light ml-2">Secure Keyphrase</label>
               <div className="relative">
-                <Lock className="absolute left-6 top-5 text-text-light opacity-40" size={20} />
+                <Lock className="input-icon text-text-light opacity-40" size={20} />
                 <input 
                   type="password" 
                   placeholder="Create password" 
-                  className="pl-16 w-full"
+                  className="input-with-icon w-full"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   required
