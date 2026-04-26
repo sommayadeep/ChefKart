@@ -55,11 +55,11 @@ const Chefs = () => {
           
           <div className="flex gap-4">
             <div className="relative group">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-text-light opacity-50 group-focus-within:text-primary transition-colors" size={18} />
+              <Search className="input-icon text-text-light opacity-50 group-focus-within:text-primary transition-colors" size={18} />
               <input 
                 type="text" 
                 placeholder="Search cuisines..." 
-                className="pl-14 pr-6 py-4 rounded-2xl bg-white border border-glass-border focus:border-primary outline-none w-72 shadow-sm transition-all"
+                className="input-with-icon pr-6 py-4 rounded-2xl bg-white border border-glass-border focus:border-primary outline-none w-72 shadow-sm transition-all"
                 value={cuisine}
                 onChange={(e) => setCuisine(e.target.value)}
               />
