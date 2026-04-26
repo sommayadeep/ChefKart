@@ -61,10 +61,10 @@ const UserSettings = () => {
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-widest text-text-light mb-2 ml-2">Full Name</label>
                 <div className="relative">
-                  <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-text-light opacity-50" size={18} />
+                  <UserIcon className="input-icon text-text-light opacity-50" size={18} />
                   <input 
                     type="text" 
-                    className="w-full pl-14 pr-5 py-4 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors font-medium text-text"
+                    className="input-with-icon w-full pr-5 py-4 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors font-medium text-text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
@@ -75,9 +75,9 @@ const UserSettings = () => {
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-widest text-text-light mb-2 ml-2">Delivery Address</label>
                 <div className="relative">
-                  <MapPin className="absolute left-5 top-5 text-text-light opacity-50" size={18} />
+                  <MapPin className="input-icon text-text-light opacity-50" size={18} />
                   <textarea 
-                    className="w-full pl-14 pr-5 py-4 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors font-medium min-h-[100px] resize-none text-text"
+                    className="input-with-icon w-full pr-5 py-4 rounded-2xl border border-glass-border focus:border-primary outline-none transition-colors font-medium min-h-[100px] resize-none text-text"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   ></textarea>
