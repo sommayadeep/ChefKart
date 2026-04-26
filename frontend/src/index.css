@@ -1,3 +1,17 @@
+  /* Responsive image card fix */
+  .feature-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 48px;
+    display: block;
+    background: #f5f5f5;
+    box-shadow: 0 4px 32px 0 rgba(0,0,0,0.04);
+    aspect-ratio: 16/9;
+    margin: 0 auto;
+  }
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 

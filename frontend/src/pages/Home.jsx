@@ -78,10 +78,10 @@ const Home = () => {
                 <img 
                   src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=1200" 
                   alt="Fine Dining" 
-                  className="rounded-[48px] w-full h-[700px] object-cover"
+                  className="feature-image"
                 />
                 
-                <div className="absolute -left-12 top-20 glass p-8 rounded-[32px] shadow-xl animate-float">
+                <div className="absolute left-6 top-6 glass p-8 rounded-[32px] shadow-xl animate-float max-w-[220px]">
                   <div className="bg-primary/10 p-3 rounded-2xl w-fit mb-4">
                     <Award size={32} className="text-primary" />
                   </div>
@@ -89,7 +89,7 @@ const Home = () => {
                   <div className="text-xs text-text-light font-medium mt-1">Vetted Excellence</div>
                 </div>
 
-                <div className="absolute -right-8 bottom-32 glass p-8 rounded-[32px] shadow-xl">
+                <div className="absolute right-6 bottom-6 glass p-8 rounded-[32px] shadow-xl max-w-[220px]">
                   <div className="bg-accent/10 p-3 rounded-2xl w-fit mb-4">
                     <ShieldCheck size={32} className="text-accent" />
                   </div>
