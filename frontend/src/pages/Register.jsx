@@ -132,11 +132,11 @@ const Register = () => {
             <div className="space-y-2.5">
               <label className="text-[11px] font-black uppercase tracking-[0.2em] text-text-light ml-2">Legal Name</label>
               <div className="relative">
-                <UserIcon className="absolute left-6 top-5 text-text-light opacity-40" size={20} />
+                <UserIcon className="input-icon text-text-light opacity-40" size={20} />
                 <input 
                   type="text" 
                   placeholder="Full Name" 
-                  className="pl-16 w-full"
+                  className="input-with-icon w-full"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   required
@@ -181,11 +181,11 @@ const Register = () => {
              <div className="space-y-2.5">
               <label className="text-[11px] font-black uppercase tracking-[0.2em] text-text-light ml-2">Residence Geography</label>
               <div className="relative">
-                <MapPin className="absolute left-6 top-5 text-text-light opacity-40" size={20} />
+                <MapPin className="input-icon text-text-light opacity-40" size={20} />
                 <input 
                   type="text" 
                   placeholder="Complete Address" 
-                  className="pl-16 pr-20 w-full"
+                  className="input-with-icon pr-20 w-full"
                   value={formData.address}
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
                   required
