@@ -150,10 +150,10 @@ const ChefProfile = () => {
                 <div>
                   <label className="block text-sm font-bold mb-2 ml-1">Select Date</label>
                   <div className="relative">
-                    <Calendar className="absolute left-4 top-4 text-text-light" size={20} />
+                    <Calendar className="input-icon text-text-light" size={20} />
                     <input 
                       type="date" 
-                      className="w-full pl-12 pr-4 py-4 rounded-2xl bg-surface border-none outline-none focus:ring-2 ring-primary"
+                      className="input-with-icon w-full pr-4 py-4 rounded-2xl bg-surface border-none outline-none focus:ring-2 ring-primary"
                       value={bookingData.date}
                       onChange={(e) => setBookingData({...bookingData, date: e.target.value})}
                       required
@@ -164,9 +164,9 @@ const ChefProfile = () => {
                 <div>
                   <label className="block text-sm font-bold mb-2 ml-1">Time Slot</label>
                   <div className="relative">
-                    <Clock className="absolute left-4 top-4 text-text-light" size={20} />
+                    <Clock className="input-icon text-text-light" size={20} />
                     <select 
-                      className="w-full pl-12 pr-4 py-4 rounded-2xl bg-surface border-none outline-none focus:ring-2 ring-primary appearance-none"
+                      className="input-with-icon w-full pr-4 py-4 rounded-2xl bg-surface border-none outline-none focus:ring-2 ring-primary appearance-none"
                       value={bookingData.timeSlot}
                       onChange={(e) => setBookingData({...bookingData, timeSlot: e.target.value})}
                     >
@@ -181,7 +181,7 @@ const ChefProfile = () => {
                   <label className="block text-sm font-bold mb-2 ml-1">Special Instructions</label>
                   <textarea 
                     placeholder="Any dietary preferences or allergies?"
-                    className="w-full p-4 rounded-2xl bg-surface border-none outline-none focus:ring-2 ring-primary min-h-[100px]"
+                    className="input-with-icon w-full p-4 rounded-2xl bg-surface border-none outline-none focus:ring-2 ring-primary min-h-[100px]"
                     value={bookingData.notes}
                     onChange={(e) => setBookingData({...bookingData, notes: e.target.value})}
                   ></textarea>
