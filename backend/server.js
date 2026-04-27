@@ -8,11 +8,26 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5174',
+    'http://127.0.0.1:5175',
+    'https://chefs-kart.vercel.app',
+    'https://chef-kart-6jd6-plum.vercel.app'
+];
+
+const isAllowedOrigin = (origin) => {
+    if (!origin) return true;
+    return allowedOrigins.includes(origin) || origin.includes('vercel.app');
+};
+
 // Middleware
 app.use(cors({
     origin: function (origin, callback) {
-        const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://chefs-kart.vercel.app', 'https://chef-kart-6jd6-plum.vercel.app'];
-        if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
+        if (isAllowedOrigin(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -44,6 +59,7 @@ app.use('/api/chefs', require('./routes/chefs'));
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/upload', require('./routes/upload'));
+app.use('/api/admin', require('./routes/admin'));
 
 const PORT = process.env.PORT || 5001;
 const server = app.listen(PORT, '0.0.0.0', () => {
@@ -54,8 +70,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 const io = require('socket.io')(server, {
     cors: {
         origin: (origin, callback) => {
-            const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://chefs-kart.vercel.app', 'https://chef-kart-6jd6-plum.vercel.app'];
-            if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
+            if (isAllowedOrigin(origin)) {
                 callback(null, true);
             } else {
                 callback(new Error('Not allowed by CORS'));

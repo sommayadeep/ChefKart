@@ -12,12 +12,26 @@ const Login = () => {
   const { login, googleLogin } = useAuth();
   const navigate = useNavigate();
 
+  const redirectAfterLogin = (role) => {
+    navigate(role === 'admin' ? '/admin' : '/dashboard');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     try {
-      await login(email, password);
-      navigate('/dashboard');
+      const res = await login(email, password);
+      redirectAfterLogin(res?.user?.role);
     } catch (err) {
+      const apiMessage = err?.response?.data?.message;
+      if (apiMessage) {
+        setError(apiMessage);
+        return;
+      }
+      if (err?.message === 'Network Error') {
+        setError('Server is unreachable. Start backend on port 5001 and try again.');
+        return;
+      }
       setError('Credentials not recognized');
     }
   };
@@ -96,9 +110,21 @@ const Login = () => {
             <GoogleLogin
               onSuccess={credentialResponse => {
                 googleLogin(credentialResponse.credential)
-                  .then(() => navigate('/dashboard'))
-                  .catch((err) => setError('Verification failed'));
+                  .then((res) => redirectAfterLogin(res?.user?.role))
+                  .catch((err) => {
+                    const apiMessage = err?.response?.data?.message;
+                    if (apiMessage) {
+                      setError(apiMessage);
+                      return;
+                    }
+                    if (err?.message === 'Network Error') {
+                      setError('Server is unreachable. Start backend on port 5001 and try again.');
+                      return;
+                    }
+                    setError('Verification failed');
+                  });
               }}
+              onError={() => setError('Google sign-in is blocked for this origin. Add this URL to Google OAuth Authorized JavaScript origins and reload.')}
               shape="pill"
             />
           </div>

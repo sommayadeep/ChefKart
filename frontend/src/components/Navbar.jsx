@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ChefHat, User, LogOut, Search, Settings } from 'lucide-react';
+import { ChefHat, User, LogOut, Search, Settings, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
@@ -37,6 +37,12 @@ const Navbar = () => {
 
           {user ? (
             <div className="flex items-center gap-10">
+              {user.role === 'admin' && (
+                <Link to="/admin" className="flex items-center gap-2.5 font-bold text-[11px] uppercase tracking-[0.2em] text-text-light hover:text-primary transition-all">
+                  <Shield size={14} className="opacity-60" />
+                  Admin Portal
+                </Link>
+              )}
               <Link to="/dashboard" className="flex items-center gap-2.5 font-bold text-[11px] uppercase tracking-[0.2em] text-text-light hover:text-primary transition-all">
                 <User size={14} className="opacity-60" />
                 Concierge

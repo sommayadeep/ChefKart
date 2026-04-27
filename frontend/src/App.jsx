@@ -11,12 +11,15 @@ import ChefProfile from './pages/ChefProfile';
 import ChefSettings from './pages/ChefSettings';
 import UserSettings from './pages/UserSettings';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
 import './index.css';
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children, role }) => {
   const { user, loading } = useAuth();
   if (loading) return <div>Loading...</div>;
-  return user ? children : <Navigate to="/login" />;
+  if (!user) return <Navigate to="/login" />;
+  if (role && user.role !== role) return <Navigate to="/dashboard" />;
+  return children;
 };
 
 function App() {
@@ -56,6 +59,14 @@ function App() {
                     <ChefSettings />
                   </PrivateRoute>
                 } 
+              />
+              <Route
+                path="/admin"
+                element={
+                  <PrivateRoute role="admin">
+                    <AdminDashboard />
+                  </PrivateRoute>
+                }
               />
             </Routes>
           </main>

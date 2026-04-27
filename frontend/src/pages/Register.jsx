@@ -70,6 +70,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     try {
       await register({ 
         ...formData, 
@@ -78,7 +79,16 @@ const Register = () => {
       });
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Application rejected');
+      const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
+      if (apiMessage) {
+        setError(apiMessage);
+        return;
+      }
+      if (err?.message === 'Network Error') {
+        setError('Server is unreachable. Start backend on port 5001 and try again.');
+        return;
+      }
+      setError('Application rejected');
     }
   };
 

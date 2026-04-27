@@ -4,7 +4,7 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const { auth } = require('../middleware/auth');
-const User = require('../models/User');
+const { uploadProfileImage } = require('../controllers/uploadController');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -22,16 +22,6 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-router.post('/image', auth, upload.single('image'), async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id);
-        user.profileImage = req.file.path;
-        await user.save();
-        res.json({ url: req.file.path });
-    } catch (err) {
-        console.error("Image Upload Error:", err);
-        res.status(500).json({ error: err.message || "Cloudinary Upload Failed" });
-    }
-});
+router.post('/image', auth, upload.single('image'), uploadProfileImage);
 
 module.exports = router;
